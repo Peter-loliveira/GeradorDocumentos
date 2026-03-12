@@ -1,0 +1,828 @@
+# Criar o arquivo HTML principal (index.html)
+html_content = '''
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RE/MAX Litorânea - Sistema de Documentos</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        :root {
+            --remax-red: #E31837;
+            --remax-blue: #0054A4;
+            --remax-dark: #1a1a1a;
+            --remax-gray: #f5f5f5;
+            --remax-border: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: var(--remax-dark);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--remax-red) 0%, #c41230 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(227, 24, 55, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-balloon {
+            width: 60px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--remax-red) 0%, var(--remax-blue) 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 20px solid var(--remax-blue);
+        }
+
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 24px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin-left: auto;
+        }
+
+        .main-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--remax-blue) 0%, #003d7a 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .card-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .card-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .card-body {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: var(--remax-dark);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .required::after {
+            content: ' *';
+            color: var(--remax-red);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid var(--remax-border);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--remax-blue);
+            box-shadow: 0 0 0 4px rgba(0, 84, 164, 0.1);
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 18px center;
+            padding-right: 45px;
+        }
+
+        .tipo-doc-select {
+            font-size: 1.1rem;
+            padding: 18px;
+            background: linear-gradient(to right, #fafafa, #ffffff);
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.3rem;
+            color: var(--remax-blue);
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--remax-red);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--remax-red);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            flex: 1;
+            min-width: 150px;
+            position: relative;
+        }
+
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .radio-option label {
+            display: block;
+            padding: 15px 20px;
+            background: var(--remax-gray);
+            border: 2px solid var(--remax-border);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0;
+        }
+
+        .radio-option input[type="radio"]:checked+label {
+            background: linear-gradient(135deg, var(--remax-red) 0%, #c41230 100%);
+            color: white;
+            border-color: var(--remax-red);
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(227, 24, 55, 0.3);
+        }
+
+        .caucao-fields {
+            display: none;
+            background: #fff8f8;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--remax-red);
+            margin-top: 15px;
+            animation: slideDown 0.3s ease;
+        }
+
+        .caucao-fields.active {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+
+            to {
+                opacity: 1;
+                max-height: 500px;
+            }
+        }
+
+        .btn-generate {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--remax-red) 0%, #c41230 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(227, 24, 55, 0.3);
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(227, 24, 55, 0.4);
+        }
+
+        .btn-generate:active {
+            transform: translateY(-1px);
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 4px solid var(--remax-blue);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #1565c0;
+        }
+
+        .info-box i {
+            margin-right: 8px;
+        }
+
+        @media (max-width: 768px) {
+
+            .grid-2,
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header h1 {
+                margin-left: 0;
+                font-size: 1.2rem;
+            }
+
+            .card-body {
+                padding: 25px;
+            }
+        }
+
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .loading.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top-color: var(--remax-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            color: white;
+            margin-top: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+        }
+
+        .placeholder-section {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .placeholder-section i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--remax-border);
+        }
+
+        .placeholder-section h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: #666;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <div class="loading-text">Gerando documento...</div>
+    </div>
+
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-balloon">
+                    <span style="color: white; font-weight: bold; font-size: 12px;">RE/MAX</span>
+                </div>
+                <div>
+                    <div class="logo-text">RE/MAX LITORÂNEA</div>
+                    <small>CRECI-BA 1101 PJ</small>
+                </div>
+                <h1><i class="fas fa-file-contract"></i> Sistema de Documentos</h1>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="card">
+            <div class="card-header">
+                <h2>Geração de Contratos e Documentos</h2>
+                <p>Selecione o tipo de documento e preencha os dados para gerar seu contrato automaticamente</p>
+            </div>
+
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="tipoDocumento" class="required">Tipo de Documento</label>
+                    <select id="tipoDocumento" class="tipo-doc-select" onchange="changeDocumentType()">
+                        <option value="">Selecione o tipo de documento...</option>
+                        <option value="representacao">Contrato de Representação</option>
+                        <option value="compravenda">Contrato de Compra e Venda</option>
+                        <option value="aditivo-venda">Aditivo à Compra e Venda</option>
+                        <option value="aluguel" selected>Contrato de Aluguel</option>
+                        <option value="aditivo-aluguel">Aditivo à Aluguel</option>
+                    </select>
+                </div>
+
+                <!-- SEÇÃO CONTRATO DE ALUGUEL -->
+                <div id="secao-aluguel" class="section active">
+                    <div class="info-box">
+                        <i class="fas fa-info-circle"></i>
+                        Preencha todos os dados abaixo. Os campos marcados com * são obrigatórios.
+                    </div>
+
+                    <!-- DADOS DO LOCADOR -->
+                    <h3 class="section-title"><i class="fas fa-user-tie"></i> Dados do Locador</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="locador_nome" class="required">Nome Completo</label>
+                            <input type="text" id="locador_nome" placeholder="Ex: Denivaldo Rodrigues dos Santos">
+                        </div>
+                        <div class="form-group">
+                            <label for="locador_nacionalidade" class="required">Nacionalidade</label>
+                            <input type="text" id="locador_nacionalidade" placeholder="Ex: Brasileiro">
+                        </div>
+                    </div>
+
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label for="locador_estado_civil" class="required">Estado Civil</label>
+                            <select id="locador_estado_civil">
+                                <option value="">Selecione...</option>
+                                <option value="Solteiro(a)">Solteiro(a)</option>
+                                <option value="Casado(a)">Casado(a)</option>
+                                <option value="Divorciado(a)">Divorciado(a)</option>
+                                <option value="Em União Estável">Em União Estável</option>
+                                <option value="Viúvo(a)">Viúvo(a)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="locador_rg" class="required">RG</label>
+                            <input type="text" id="locador_rg" placeholder="Ex: 0148282431">
+                        </div>
+                        <div class="form-group">
+                            <label for="locador_rg_orgao" class="required">Órgão Expedidor/UF</label>
+                            <input type="text" id="locador_rg_orgao" placeholder="Ex: SSP/BA">
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="locador_cpf" class="required">CPF</label>
+                            <input type="text" id="locador_cpf" placeholder="Ex: 212.261.305-00">
+                        </div>
+                        <div class="form-group">
+                            <label for="locador_email" class="required">E-mail</label>
+                            <input type="email" id="locador_email" placeholder="Ex: deniro21@outlook.com">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="locador_endereco" class="required">Endereço Completo</label>
+                        <input type="text" id="locador_endereco"
+                            placeholder="Ex: Alameda Nossa Senhora do Resgate, 165 Cond. Colina Verde, Ed. Araucária, Ap. 001 - Resgate - 41152-045">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="locador_telefone" class="required">Celular</label>
+                        <input type="tel" id="locador_telefone" placeholder="Ex: +55 71 9608-5654">
+                    </div>
+
+                    <!-- DADOS DO LOCATÁRIO -->
+                    <h3 class="section-title"><i class="fas fa-user"></i> Dados do Locatário</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="locatario_nome" class="required">Nome Completo</label>
+                            <input type="text" id="locatario_nome" placeholder="Ex: Jacklinne Lima da Palma">
+                        </div>
+                        <div class="form-group">
+                            <label for="locatario_nacionalidade" class="required">Nacionalidade</label>
+                            <input type="text" id="locatario_nacionalidade" placeholder="Ex: Brasileira">
+                        </div>
+                    </div>
+
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label for="locatario_estado_civil" class="required">Estado Civil</label>
+                            <select id="locatario_estado_civil">
+                                <option value="">Selecione...</option>
+                                <option value="Solteiro(a)">Solteiro(a)</option>
+                                <option value="Casado(a)">Casado(a)</option>
+                                <option value="Divorciado(a)">Divorciado(a)</option>
+                                <option value="Em União Estável">Em União Estável</option>
+                                <option value="Viúvo(a)">Viúvo(a)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="locatario_rg" class="required">RG</label>
+                            <input type="text" id="locatario_rg" placeholder="Ex: 1474308287">
+                        </div>
+                        <div class="form-group">
+                            <label for="locatario_rg_orgao" class="required">Órgão Expedidor/UF</label>
+                            <input type="text" id="locatario_rg_orgao" placeholder="Ex: SSP/BA">
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="locatario_cpf" class="required">CPF</label>
+                            <input type="text" id="locatario_cpf" placeholder="Ex: 067.048.215-38">
+                        </div>
+                        <div class="form-group">
+                            <label for="locatario_email" class="required">E-mail</label>
+                            <input type="email" id="locatario_email" placeholder="Ex: ljacklinne@gmail.com">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="locatario_endereco" class="required">Endereço Completo</label>
+                        <input type="text" id="locatario_endereco"
+                            placeholder="Ex: Rua Pedro Alexandre, Ap. 06, Quadra F, vila dos Ex. Combatentes, CEP: 41.820-855">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="locatario_telefone" class="required">Celular</label>
+                        <input type="tel" id="locatario_telefone" placeholder="Ex: +55 71 98326-5044">
+                    </div>
+
+                    <!-- DADOS DO CORRETOR -->
+                    <h3 class="section-title"><i class="fas fa-id-badge"></i> Dados do Corretor</h3>
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label for="corretor_nome" class="required">Nome Completo</label>
+                            <input type="text" id="corretor_nome" placeholder="Ex: Peter Lange Oliveira">
+                        </div>
+                        <div class="form-group">
+                            <label for="corretor_cpf" class="required">CPF</label>
+                            <input type="text" id="corretor_cpf" placeholder="Ex: 789.784.085-91">
+                        </div>
+                        <div class="form-group">
+                            <label for="corretor_creci" class="required">CRECI</label>
+                            <input type="text" id="corretor_creci" placeholder="Ex: 31687">
+                        </div>
+                    </div>
+
+                    <!-- DADOS DO CONTRATO -->
+                    <h3 class="section-title"><i class="fas fa-calendar-alt"></i> Datas do Contrato</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="data_pagamento" class="required">Dia do Pagamento do Aluguel</label>
+                            <input type="number" id="data_pagamento" min="1" max="31" placeholder="Ex: 05">
+                        </div>
+                        <div class="form-group">
+                            <label for="data_entrada" class="required">Data de Entrada do(s) Inquilino(s)</label>
+                            <input type="date" id="data_entrada">
+                        </div>
+                    </div>
+
+                    <!-- SEGURANÇA DO IMÓVEL -->
+                    <h3 class="section-title"><i class="fas fa-shield-alt"></i> Segurança do Imóvel</h3>
+                    <div class="form-group">
+                        <label class="required">Tipo de Segurança</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" name="tipo_seguranca" id="seguro_locaticio" value="seguro"
+                                    onchange="toggleSeguranca()">
+                                <label for="seguro_locaticio">
+                                    <i class="fas fa-file-signature"></i><br>
+                                    Seguro Locatício
+                                </label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" name="tipo_seguranca" id="caucao" value="caucao"
+                                    onchange="toggleSeguranca()">
+                                <label for="caucao">
+                                    <i class="fas fa-money-bill-wave"></i><br>
+                                    Caução
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="caucao_fields" class="caucao-fields">
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label for="caucao_valor" class="required">Valor da Caução (R$)</label>
+                                <input type="text" id="caucao_valor" placeholder="Ex: 1.200,00">
+                            </div>
+                            <div class="form-group">
+                                <label for="caucao_meses" class="required">Equivalente a quantos meses?</label>
+                                <input type="number" id="caucao_meses" min="1" max="12" placeholder="Ex: 2">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- OBJETO DO CONTRATO -->
+                    <h3 class="section-title"><i class="fas fa-home"></i> Objeto do Contrato (Imóvel)</h3>
+                    <div class="form-group">
+                        <label for="tipo_imovel" class="required">Tipo de Imóvel</label>
+                        <select id="tipo_imovel">
+                            <option value="">Selecione...</option>
+                            <option value="Casa Residencial">Casa Residencial</option>
+                            <option value="Apartamento">Apartamento</option>
+                            <option value="Ponto Comercial">Ponto Comercial</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imovel_descricao" class="required">Descrição do Imóvel</label>
+                        <textarea id="imovel_descricao" rows="3"
+                            placeholder="Ex: Casa térrea de 01 quarto, Sala, 01 Banheiro, Área de Serviços e cozinha, não mobiliada"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imovel_endereco" class="required">Endereço do Imóvel</label>
+                        <input type="text" id="imovel_endereco"
+                            placeholder="Ex: 1º Travessa do Buris, Abrantes, Camaçari-BA, CEP 42828-730">
+                    </div>
+
+                    <!-- DADOS FINANCEIROS -->
+                    <h3 class="section-title"><i class="fas fa-dollar-sign"></i> Dados Financeiros</h3>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="valor_aluguel" class="required">Valor do Aluguel Mensal (R$)</label>
+                            <input type="text" id="valor_aluguel" placeholder="Ex: 600,00">
+                        </div>
+                        <div class="form-group">
+                            <label for="prazo_locacao" class="required">Prazo da Locação (meses)</label>
+                            <input type="number" id="prazo_locacao" placeholder="Ex: 30">
+                        </div>
+                    </div>
+
+                    <button class="btn-generate" onclick="gerarContratoAluguel()">
+                        <i class="fas fa-file-word"></i>
+                        Gerar Contrato de Aluguel
+                    </button>
+                </div>
+
+                <!-- PLACEHOLDER PARA OUTROS TIPOS -->
+                <div id="secao-placeholder" class="section">
+                    <div class="placeholder-section">
+                        <i class="fas fa-tools"></i>
+                        <h3>Em Desenvolvimento</h3>
+                        <p>Este tipo de documento ainda está sendo implementado.<br>Por favor, selecione "Contrato de
+                            Aluguel" para testar o sistema.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts específicos de cada documento -->
+    <script src="js/contrato-aluguel.js"></script>
+    <script src="js/contrato-representacao.js"></script>
+    <script src="js/contrato-compravenda.js"></script>
+    <script src="js/aditivo-venda.js"></script>
+    <script src="js/aditivo-aluguel.js"></script>
+
+    <!-- Script principal do sistema -->
+    <script>
+        function changeDocumentType() {
+            const tipo = document.getElementById('tipoDocumento').value;
+
+            // Esconde todas as seções
+            document.querySelectorAll('.section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+
+            // Mostra a seção apropriada
+            if (tipo === 'aluguel') {
+                document.getElementById('secao-aluguel').classList.add('active');
+            } else if (tipo !== '') {
+                document.getElementById('secao-placeholder').classList.add('active');
+            }
+        }
+
+        function toggleSeguranca() {
+            const tipo = document.querySelector('input[name="tipo_seguranca"]:checked')?.value;
+            const caucaoFields = document.getElementById('caucao_fields');
+
+            if (tipo === 'caucao') {
+                caucaoFields.classList.add('active');
+            } else {
+                caucaoFields.classList.remove('active');
+            }
+        }
+
+        // Funções utilitárias globais
+        function formatarData(data) {
+            if (!data) return '';
+            const d = new Date(data);
+            return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+        }
+
+        function formatarDataCurta(data) {
+            if (!data) return '';
+            const d = new Date(data);
+            return d.toLocaleDateString('pt-BR');
+        }
+
+        function calcularDataFim(dataInicio, meses) {
+            if (!dataInicio || !meses) return '';
+            const d = new Date(dataInicio);
+            d.setMonth(d.getMonth() + parseInt(meses));
+            return formatarData(d);
+        }
+
+        function numeroPorExtenso(numero) {
+            const unidades = ['', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove'];
+            const especiais = ['dez', 'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove'];
+            const dezenas = ['', '', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa'];
+
+            if (numero < 10) return unidades[numero];
+            if (numero < 20) return especiais[numero - 10];
+            if (numero < 100) {
+                const dez = Math.floor(numero / 10);
+                const unid = numero % 10;
+                return dezenas[dez] + (unid > 0 ? ' e ' + unidades[unid] : '');
+            }
+            return numero.toString();
+        }
+
+        function mostrarLoading() {
+            document.getElementById('loading').classList.add('active');
+        }
+
+        function ocultarLoading() {
+            document.getElementById('loading').classList.remove('active');
+        }
+    </script>
+</body>
+
+</html>
