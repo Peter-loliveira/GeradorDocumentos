@@ -285,7 +285,7 @@ async function gerarContratoAluguel() {
             [
                 new TextRun({ text: "3. Fica estabelecido o valor de " }),
                 new TextRun({ text: "R$ " + dados.contrato.caucao_valor + " ", bold: true }),
-                new TextRun({ text: "(" + caucaoMesesExtenso + " meses de aluguel), ", bold: true }),
+                new TextRun({ text: "(equivalente a" + caucaoMesesExtenso + " meses de aluguel), ", bold: true }),
                 new TextRun({ text: "a título de " }),
                 new TextRun({ text: "CAUÇÃO", bold: true }),
                 new TextRun({ text: ", sendo este pago da forma acordada entre as partes." })
