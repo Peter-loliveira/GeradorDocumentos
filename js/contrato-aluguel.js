@@ -93,7 +93,17 @@ async function gerarContratoAluguel() {
     mostrarLoading();
 
     try {
-        const { Document, Packer, Paragraph, TextRun, AlignmentType, HeadingLevel } = docx;
+        // Verificar disponibilidade das bibliotecas
+        if (typeof window.docx === 'undefined') {
+            throw new Error('Biblioteca docx não está disponível. Verifique sua conexão com a internet ou se o script foi bloqueado.');
+        }
+
+        // Acessar docx através do objeto window
+        const docxLib = window.docx;
+        console.log('docxLib carregado:', docxLib);
+        
+        const { Document, Packer, Paragraph, TextRun, AlignmentType, HeadingLevel } = docxLib;
+        
         const dados = coletarDadosAluguel();
         
         const dataEntrada = new Date(dados.contrato.data_entrada);
@@ -668,9 +678,8 @@ async function gerarContratoAluguel() {
                 spacing: { after: 100 }
             }),
             new Paragraph({
-                text: dados.locador.nome,
+                children: [new TextRun({ text: dados.locador.nome, bold: true })],
                 alignment: AlignmentType.CENTER,
-                bold: true,
                 spacing: { after: 600 }
             }),
             new Paragraph({
@@ -684,9 +693,8 @@ async function gerarContratoAluguel() {
                 spacing: { after: 100 }
             }),
             new Paragraph({
-                text: dados.corretor.nome,
+                children: [new TextRun({ text: dados.corretor.nome, bold: true })],
                 alignment: AlignmentType.CENTER,
-                bold: true,
                 spacing: { after: 600 }
             }),
             new Paragraph({
@@ -700,9 +708,8 @@ async function gerarContratoAluguel() {
                 spacing: { after: 100 }
             }),
             new Paragraph({
-                text: dados.locatario.nome,
-                alignment: AlignmentType.CENTER,
-                bold: true
+                children: [new TextRun({ text: dados.locatario.nome, bold: true })],
+                alignment: AlignmentType.CENTER
             })
         );
 
@@ -726,14 +733,27 @@ async function gerarContratoAluguel() {
         // Gerar arquivo
         const blob = await Packer.toBlob(doc);
         const fileName = "Contrato_Locacao_" + dados.locatario.nome.split(" ")[0] + "_" + new Date().toISOString().split("T")[0] + ".docx";
-        saveAs(blob, fileName);
+        
+        // Usar saveAs do FileSaver.js ou fallback
+        if (window.saveAs) {
+            window.saveAs(blob, fileName);
+        } else {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
 
         ocultarLoading();
         alert("Contrato gerado com sucesso!");
 
     } catch (error) {
-        console.error(error);
+        console.error("Erro detalhado:", error);
         ocultarLoading();
-        alert("Erro ao gerar contrato. Por favor, tente novamente.");
+        alert("Erro ao gerar contrato: " + error.message);
     }
 }
