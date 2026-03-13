@@ -12,7 +12,7 @@
 
     <style>
         :root {
-            --remax-red: #E31837;
+            --remax-red: #f34963;
             --remax-blue: #0054A4;
             --remax-dark: #1a1a1a;
             --remax-gray: #f5f5f5;
@@ -36,7 +36,7 @@
             background: linear-gradient(135deg, var(--remax-red) 0%, #c41230 100%);
             color: white;
             padding: 20px 0;
-            box-shadow: 0 4px 20px rgba(227, 24, 55, 0.3);
+            box-shadow: 0 4px 20px rgba(241, 72, 97, 0.3);
             position: relative;
             overflow: hidden;
         }
@@ -79,29 +79,10 @@
             z-index: 1;
         }
 
-        .logo-balloon {
-            width: 60px;
-            height: 70px;
-            background: linear-gradient(135deg, var(--remax-red) 0%, var(--remax-blue) 100%);
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .logo-balloon::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-top: 20px solid var(--remax-blue);
+        .logoBalao {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
         }
 
         .logo-text {
@@ -462,27 +443,25 @@
         <div class="loading-text">Gerando documento...</div>
     </div>
 
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo-balloon">
-                    <span style="color: white; font-weight: bold; font-size: 12px;">RE/MAX</span>
-                </div>
-                <div>
-                    <div class="logo-text">RE/MAX LITORÂNEA</div>
-                    <small>CRECI-BA 1101 PJ</small>
-                </div>
-                <h1><i class="fas fa-file-contract"></i> Sistema de Documentos</h1>
-            </div>
-        </div>
-    </header>
-
+    
     <div class="main-container">
         <div class="card">
-            <div class="card-header">
-                <h2>Geração de Contratos e Documentos</h2>
+            <header class="header">
+                <div class="container">
+                    <div class="header-content">
+                            <img class="logoBalao" src="assets/LogoBalao.png" alt="logotipoRemax">
+        
+                        <div>
+                            <div class="logo-text">RE/MAX LITORÂNEA</div>
+                            <!-- <small>CRECI-BA 1101 PJ</small> -->
+                            <h2>Gerador de Contratos e Documentos</h2>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- <div class="card-header">
                 <p>Selecione o tipo de documento e preencha os dados para gerar seu contrato automaticamente</p>
-            </div>
+            </div> -->
 
             <div class="card-body">
                 <div class="form-group">
@@ -501,7 +480,7 @@
                 <div id="secao-aluguel" class="section active">
                     <div class="info-box">
                         <i class="fas fa-info-circle"></i>
-                        Preencha todos os dados abaixo. Os campos marcados com * são obrigatórios.
+                        Preencha todos os dados abaixo.
                     </div>
 
                     <!-- DADOS DO LOCADOR -->
@@ -509,7 +488,7 @@
                     <div class="grid-2">
                         <div class="form-group">
                             <label for="locador_nome" class="required">Nome Completo</label>
-                            <input type="text" id="locador_nome" placeholder="Ex: Denivaldo Rodrigues dos Santos">
+                            <input type="text" id="locador_nome" placeholder="Nome Completo do LOCADOR">
                         </div>
                         <div class="form-group">
                             <label for="locador_nacionalidade" class="required">Nacionalidade</label>
@@ -524,41 +503,42 @@
                                 <option value="">Selecione...</option>
                                 <option value="Solteiro(a)">Solteiro(a)</option>
                                 <option value="Casado(a)">Casado(a)</option>
+                                <option value="União Estável"> União Estável</option>
                                 <option value="Divorciado(a)">Divorciado(a)</option>
-                                <option value="Em União Estável">Em União Estável</option>
+                                <option value="Separado(a) Judicialmente/Extrajudicialmente"> Separado(a) Judicialmente/Extrajudicialmente </option>
                                 <option value="Viúvo(a)">Viúvo(a)</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="locador_rg" class="required">RG</label>
-                            <input type="text" id="locador_rg" placeholder="Ex: 0148282431">
+                            <input type="text" id="locador_rg" placeholder="rg do LOCADOR.">
                         </div>
                         <div class="form-group">
                             <label for="locador_rg_orgao" class="required">Órgão Expedidor/UF</label>
-                            <input type="text" id="locador_rg_orgao" placeholder="Ex: SSP/BA">
+                            <input type="text" id="locador_rg_orgao" placeholder="Orgão Expedidor/UF">
                         </div>
                     </div>
 
                     <div class="grid-2">
                         <div class="form-group">
                             <label for="locador_cpf" class="required">CPF</label>
-                            <input type="text" id="locador_cpf" placeholder="Ex: 212.261.305-00">
+                            <input type="text" id="locador_cpf" placeholder="XXX.XXX.XXX-XX">
                         </div>
                         <div class="form-group">
                             <label for="locador_email" class="required">E-mail</label>
-                            <input type="email" id="locador_email" placeholder="Ex: deniro21@outlook.com">
+                            <input type="email" id="locador_email" placeholder="Inserir e-mail do LOCADOR">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="locador_endereco" class="required">Endereço Completo</label>
                         <input type="text" id="locador_endereco"
-                            placeholder="Ex: Alameda Nossa Senhora do Resgate, 165 Cond. Colina Verde, Ed. Araucária, Ap. 001 - Resgate - 41152-045">
+                            placeholder="Endereço Completo do LOCADOR.">
                     </div>
 
                     <div class="form-group">
                         <label for="locador_telefone" class="required">Celular</label>
-                        <input type="tel" id="locador_telefone" placeholder="Ex: +55 71 9608-5654">
+                        <input type="tel" id="locador_telefone" placeholder="Ex: +55 xx 9xxxx-xxxx'">
                     </div>
 
                     <!-- DADOS DO LOCATÁRIO -->
@@ -566,11 +546,11 @@
                     <div class="grid-2">
                         <div class="form-group">
                             <label for="locatario_nome" class="required">Nome Completo</label>
-                            <input type="text" id="locatario_nome" placeholder="Ex: Jacklinne Lima da Palma">
+                            <input type="text" id="locatario_nome" placeholder="Nome Completo do LOCATÁRIO">
                         </div>
                         <div class="form-group">
                             <label for="locatario_nacionalidade" class="required">Nacionalidade</label>
-                            <input type="text" id="locatario_nacionalidade" placeholder="Ex: Brasileira">
+                            <input type="text" id="locatario_nacionalidade" placeholder="Nacionalidade do LOCATÁRIO">
                         </div>
                     </div>
 
@@ -592,7 +572,7 @@
                         </div>
                         <div class="form-group">
                             <label for="locatario_rg_orgao" class="required">Órgão Expedidor/UF</label>
-                            <input type="text" id="locatario_rg_orgao" placeholder="Ex: SSP/BA">
+                            <input type="text" id="locatario_rg_orgao" placeholder="Orgão Expedidor/UF">
                         </div>
                     </div>
 
