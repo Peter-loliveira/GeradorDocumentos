@@ -1,18 +1,15 @@
-# Criar o arquivo HTML principal (index.html)
-html_content = '''
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RE/MAX Litorânea - Sistema de Documentos</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
     <style>
         :root {
             --remax-red: #E31837;
@@ -751,17 +748,19 @@ html_content = '''
     <script src="js/aditivo-venda.js"></script>
     <script src="js/aditivo-aluguel.js"></script>
 
-    <!-- Script principal do sistema -->
     <script>
+        // Verificar se as bibliotecas carregaram
+        console.log('Verificando bibliotecas...');
+        console.log('window.docx:', window.docx);
+        console.log('window.saveAs:', window.saveAs);
+        
         function changeDocumentType() {
             const tipo = document.getElementById('tipoDocumento').value;
-
-            // Esconde todas as seções
+            
             document.querySelectorAll('.section').forEach(sec => {
                 sec.classList.remove('active');
             });
-
-            // Mostra a seção apropriada
+            
             if (tipo === 'aluguel') {
                 document.getElementById('secao-aluguel').classList.add('active');
             } else if (tipo !== '') {
@@ -772,7 +771,7 @@ html_content = '''
         function toggleSeguranca() {
             const tipo = document.querySelector('input[name="tipo_seguranca"]:checked')?.value;
             const caucaoFields = document.getElementById('caucao_fields');
-
+            
             if (tipo === 'caucao') {
                 caucaoFields.classList.add('active');
             } else {
@@ -804,7 +803,7 @@ html_content = '''
             const unidades = ['', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove'];
             const especiais = ['dez', 'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove'];
             const dezenas = ['', '', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa'];
-
+            
             if (numero < 10) return unidades[numero];
             if (numero < 20) return especiais[numero - 10];
             if (numero < 100) {
@@ -823,6 +822,12 @@ html_content = '''
             document.getElementById('loading').classList.remove('active');
         }
     </script>
+    
+    <!-- Scripts específicos dos documentos - POR ÚLTIMO -->
+    <script src="js/contrato-aluguel.js"></script>
+    <script src="js/contrato-representacao.js"></script>
+    <script src="js/contrato-compravenda.js"></script>
+    <script src="js/aditivo-venda.js"></script>
+    <script src="js/aditivo-aluguel.js"></script>
 </body>
-
 </html>
