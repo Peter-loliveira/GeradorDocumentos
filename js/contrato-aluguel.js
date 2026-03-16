@@ -566,9 +566,9 @@ async function gerarContratoAluguel() {
         const dados = coletarDadosAluguel();
 
         // Carregar o template MODELO.docx
-        const response = await fetch('MODELOS/MODELO.docx');
+        const response = await fetch('https://drive.google.com/uc?export=download&id=1IjDWwXtAhNjzyULF-j0Us7A4LytFSZUq');
         if (!response.ok) {
-            throw new Error('Não foi possível carregar o template MODELO.docx da pasta MODELOS/');
+            throw new Error('Não foi possível carregar o template MODELO.docx!');
         }
 
         const templateBuffer = await response.arrayBuffer();
